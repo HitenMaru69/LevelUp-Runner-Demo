@@ -2,14 +2,11 @@
 public class NameTag 
 {
     public const string Player = "Player";
+    public const string Coin = "Coin";
 
-    // Player Animation name
-    public const string Run = "IsRun";
-    public const string Punch = "IsPunch";
-    public const string Death = "IsDeath";
+    public const string GamePlayScene = "GamePlay";
 
-    // Enemy Animation name
-    public const string enemyIdle = "IsIdle";
-    public const string enemyPunch = "IsPunch";
-    public const string enemyDeath = "IsDeath";
+
+    //Playrefeb Name
+    public const string PlayerLevel = "CurrentLevel";
 }
