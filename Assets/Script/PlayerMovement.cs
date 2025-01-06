@@ -14,11 +14,14 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 startingMousePosition;
     private Vector3 startingPlayerPosition;
     private float originalRunSpeed;
+
+
     private void Start()
     {
         PlayAnimation(runClip.name);
         originalRunSpeed = playerRunSpeed;
-       
+        
+
     }
 
 
@@ -26,31 +29,37 @@ public class PlayerMovement : MonoBehaviour
     {
 
         RunPlayer();
-    
+
+        
         if (Input.GetMouseButtonDown(0))
         {
             startingMousePosition = Input.mousePosition;
             startingPlayerPosition = transform.position;
         }
-
         if (Input.GetMouseButton(0))
         {
-            LeftRighMovement();
+            LeftRighMovement();          
         }
 
     }
 
     void LeftRighMovement()
     {
+        
+
         Vector3 mousePos = Input.mousePosition - startingMousePosition;
 
         float xdir = mousePos.x / Screen.width * playerSpeed;
 
-        Vector3 newPos = startingPlayerPosition + new Vector3(xdir, 0, 0);
+        Vector3 newPos = transform.position;
+            
+        newPos.x = startingPlayerPosition.x + xdir;
 
         newPos.x = Mathf.Clamp(newPos.x, -maxXposition, maxXposition);
 
-        transform.position = newPos;
+        transform.position = new Vector3(newPos.x, transform.position.y, transform.position.z);
+
+
     }
 
     void RunPlayer()
