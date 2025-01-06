@@ -9,4 +9,5 @@ public class NameTag
 
     //Playrefeb Name
     public const string PlayerLevel = "CurrentLevel";
+    public const string loadLevel = "LoadLevel";
 }

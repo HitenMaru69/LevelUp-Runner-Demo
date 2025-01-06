@@ -13,15 +13,17 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] AnimationClip runClip;
     [SerializeField] AnimationClip punchClip;
     [SerializeField] AnimationClip deathClip;
-
+    [SerializeField] AnimationClip bossPunch;
+ 
     [SerializeField] TextMeshPro level_Txt;
 
     public int currentLevel = 1;
+    public int incressLevel = 0;
 
     private Vector3 startingMousePosition;
     private Vector3 startingPlayerPosition;
     private float originalRunSpeed;
-    private int incressLevel = 0;
+    
 
 
     private void OnEnable()
@@ -61,9 +63,8 @@ public class PlayerMovement : MonoBehaviour
     }
 
 
-    void LeftRighMovement()
+    void LeftRighMovement()     // For Player Left Right Movement
     {
-
 
         Vector3 mousePos = Input.mousePosition - startingMousePosition;
 
@@ -77,18 +78,26 @@ public class PlayerMovement : MonoBehaviour
 
         transform.position = new Vector3(newPos.x, transform.position.y, transform.position.z);
 
-
     }
 
-    void RunPlayer()
+    void RunPlayer() // For player Run
     {
         transform.Translate(Vector3.forward * playerRunSpeed * Time.deltaTime);
     }
 
 
+    #region Animations
+
     public void PlayAnimation(string clip)
     {
         animation.Play(clip);
+    }
+
+    public void MainEnemyPunch()
+    {
+        playerRunSpeed = 0;
+        animation.Play(bossPunch.name);
+       
     }
 
     public void PlayPunchAnimation()
@@ -110,6 +119,7 @@ public class PlayerMovement : MonoBehaviour
         animation.Play(runClip.name);
     }
 
+    #endregion
     public void UpdateLevelText()
     {
         currentLevel += 2;
@@ -117,6 +127,8 @@ public class PlayerMovement : MonoBehaviour
         level_Txt.text = "Level:" + currentLevel;
   
     }
+
+    // Event Subcribe
 
     private void PlayDeathAnimation(object sender, System.EventArgs e)
     {

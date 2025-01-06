@@ -1,3 +1,4 @@
+using System.Collections;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -10,6 +11,7 @@ public enum EnemyType
 
 public class Enemy : MonoBehaviour
 {
+    
     [SerializeField] Animation enemyAnimation;
     [SerializeField] AnimationClip idleClip;
     [SerializeField] AnimationClip punchClip;
@@ -18,19 +20,21 @@ public class Enemy : MonoBehaviour
     [SerializeField] TextMeshPro txt;
     [SerializeField] int level;
 
-    [SerializeField] EnemyType enemyType;
+    public EnemyType enemyType;
+
+    bool isMainEnemyKill;
 
     private void OnEnable()
     {
         GameManager.instance.PlayerDie += PlayPunchAnimation;
     }
 
-
-
     private void Start()
     {
         enemyAnimation.Play(idleClip.name);
         txt.text = "Level:" + level;
+
+        
     }
 
 
@@ -40,10 +44,33 @@ public class Enemy : MonoBehaviour
         {
             if(enemyType == EnemyType.main)
             {
-                // Main Enemy 
+                PlayerMovement playerMovement = other.gameObject.GetComponent<PlayerMovement>();
+
+                if (playerMovement.currentLevel >= level)
+                {
+                    // Play Animation
+                    playerMovement.MainEnemyPunch();
+                    StartCoroutine(EnemyDeath());
+
+                    // Set Player Level
+                    playerMovement.currentLevel = playerMovement.incressLevel;
+                    playerMovement.currentLevel+=1;
+                    PlayerPrefs.SetInt(NameTag.PlayerLevel, playerMovement.currentLevel);
+
+                    // Set Next Level
+                    GameManager.instance.IncreesLevel();
+
+                }
+                else
+                {
+                    GameManager.instance.CallPlayerDieEvent();
+                }
+
             }
             else
             {
+                // For Normal Enemy
+
                 PlayerMovement playerMovement = other.gameObject.GetComponent<PlayerMovement>();
 
                 if (playerMovement.currentLevel > level)
@@ -71,5 +98,13 @@ public class Enemy : MonoBehaviour
     private void OnDisable()
     {
         GameManager.instance.PlayerDie -= PlayPunchAnimation;
+    }
+
+    IEnumerator EnemyDeath()
+    {
+        yield return new WaitForSeconds(1f);
+        enemyAnimation.Play(deathClip.name);
+        yield return new WaitForSeconds(enemyAnimation[deathClip.name].length);
+        GameManager.instance.ShowNextLevelCanvas(enemyAnimation[deathClip.name].length);
     }
 }
