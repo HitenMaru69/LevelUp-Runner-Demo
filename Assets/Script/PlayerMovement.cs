@@ -67,15 +67,10 @@ public class PlayerMovement : MonoBehaviour
     {
 
         Vector3 mousePos = Input.mousePosition - startingMousePosition;
-
         float xdir = mousePos.x / Screen.width * playerSpeed;
-
         Vector3 newPos = transform.position;
-
         newPos.x = startingPlayerPosition.x + xdir;
-
         newPos.x = Mathf.Clamp(newPos.x, -maxXposition, maxXposition);
-
         transform.position = new Vector3(newPos.x, transform.position.y, transform.position.z);
 
     }

@@ -24,11 +24,6 @@ public class Enemy : MonoBehaviour
 
     bool isMainEnemyKill;
 
-    private void OnEnable()
-    {
-        GameManager.instance.PlayerDie += PlayPunchAnimation;
-    }
-
     private void Start()
     {
         enemyAnimation.Play(idleClip.name);
@@ -64,6 +59,7 @@ public class Enemy : MonoBehaviour
                 else
                 {
                     GameManager.instance.CallPlayerDieEvent();
+                    enemyAnimation.Play(punchClip.name);
                 }
 
             }
@@ -82,6 +78,7 @@ public class Enemy : MonoBehaviour
                 else
                 {               
                     GameManager.instance.CallPlayerDieEvent();
+                    enemyAnimation.Play(punchClip.name);
                 }
             }
 
@@ -90,15 +87,9 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    private void PlayPunchAnimation(object sender, System.EventArgs e)
-    {
-        enemyAnimation.Play(punchClip.name);
-    }
+  
 
-    private void OnDisable()
-    {
-        GameManager.instance.PlayerDie -= PlayPunchAnimation;
-    }
+
 
     IEnumerator EnemyDeath()
     {
